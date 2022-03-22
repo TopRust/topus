@@ -12,9 +12,9 @@
 
 为了减少学习难度，所有字符串类型为`String`，而不是带有生命周期的`&str`。
 
-`enum Attribute`有两个attribute变种。
+`enum Attribute`有两个`attribute`变种。
 
-1. `Boolean(String)`，代表布尔属性，如hidden。
+1. `Boolean(String)`，代表布尔属性，如`hidden`。
 2. `Normal { key: String, value: Sting }`，代表普通属性，如`style="display: None"`。
 
 ### 创建方式
@@ -51,7 +51,7 @@ assert_eq!(style, macro_style);
 assert_eq!(http_equiv, macro_http_equiv);
 ```
 
-### 创建Vec<Attribute>
+### 创建`Vec<Attribute>`
 
 使用attributes宏可以很方便的创建Vec<Attribute>
 
@@ -67,7 +67,7 @@ assert_eq!(
     attrs);
 ```
 
-细心的应该发现问题了，`html`和`style="display:None"` 属性是逆向加入Vec容器的。
+细心的应该发现问题了，`html`和`style="display:None"` 属性是逆向加入`Vec`容器的。
 
 ## Node
 
@@ -120,9 +120,9 @@ assert_eq!("<a hidden style=\"display:None\">".to_string(), macro_a.to_string())
 
 细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
 
-### 创建Vec<Node>
+### 创建`Vec<Node>`
 
-使用elements宏可以很方便的创建Vec<Node>
+使用elements宏可以很方便的创建`Vec<Node>`
 
 ``` rust
 let nodes = nodes!(head body);
@@ -135,7 +135,7 @@ assert_eq!(
 
 同样的，`head`和`body` 节点是逆序的。
 
-## 使用epxression
+## 使用`epxression`
 
 在`element!` 宏调用中我们也可以传入表达式参数。如
 
@@ -155,7 +155,7 @@ let html = element!(html charset="UTF-8" =>
 
 ## 生成html文件
 
-通过`build!`宏，生成html文件。
+通过`build!`宏，生成`html`文件。
 
 ``` rust
 build!(html => "index.html");

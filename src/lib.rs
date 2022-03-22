@@ -14,9 +14,9 @@
 
 //! 为了减少学习难度，所有字符串类型为`String`，而不是带有生命周期的`&str`。
 
-//! `enum Attribute`有两个attribute变种。
+//! `enum Attribute`有两个`attribute`变种。
 
-//! 1. `Boolean(String)`，代表布尔属性，如hidden。
+//! 1. `Boolean(String)`，代表布尔属性，如`hidden`。
 //! 2. `Normal { key: String, value: Sting }`，代表普通属性，如`style="display: None"`。
 
 //! ### 创建方式
@@ -53,7 +53,7 @@
 //! assert_eq!(http_equiv, macro_http_equiv);
 //! ```
 
-//! ### 创建Vec<Attribute>
+//! ### 创建`Vec<Attribute>`
 
 //! 使用attributes宏可以很方便的创建Vec<Attribute>
 
@@ -69,7 +69,7 @@
 //!     attrs);
 //! ```
 
-//! 细心的应该发现问题了，`html`和`style="display:None"` 属性是逆向加入Vec容器的。
+//! 细心的应该发现问题了，`html`和`style="display:None"` 属性是逆向加入`Vec`容器的。
 
 //! ## Node
 
@@ -122,9 +122,9 @@
 
 //! 细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
 
-//! ### 创建Vec<Node>
+//! ### 创建`Vec<Node>`
 
-//! 使用elements宏可以很方便的创建Vec<Node>
+//! 使用elements宏可以很方便的创建`Vec<Node>`
 
 //! ``` rust
 //! let nodes = nodes!(head body);
@@ -137,7 +137,7 @@
 
 //! 同样的，`head`和`body` 节点是逆序的。
 
-//! ## 使用epxression
+//! ## 使用`epxression`
 
 //! 在`element!` 宏调用中我们也可以传入表达式参数。如
 
@@ -157,23 +157,23 @@
 
 //! ## 生成html文件
 
-//! 通过`build!`宏，生成html文件。
+//! 通过`build!`宏，生成`html`文件。
 
 //! ``` rust
 //! build!(html => "index.html");
-//! ```
+//!```
 
 use std::fmt;
-// Attribute has two varient.
-// - Boolean: html, hidden
-// - Normal: style="display: None"
+/// Attribute has two varient.
+/// - Boolean: html, hidden
+/// - Normal: style="display: None"
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub enum Attribute {
     Boolean(String),
     Normal { key: String, value: String },
 }
 
-// Display Attribute
+/// Display Attribute
 
 impl fmt::Display for Attribute {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -188,7 +188,7 @@ impl fmt::Display for Attribute {
     }
 }
 
-// Create Attribute
+/// Create Attribute
 #[macro_export]
 macro_rules! attribute {
     ($value:ident) => {
@@ -220,7 +220,7 @@ macro_rules! attribute {
     };
 }
 
-// Create Vec<Attribute>
+/// Create Vec<Attribute>
 
 macro_rules! attributes {
     () => {
@@ -279,10 +279,10 @@ macro_rules! attributes {
     };
 }
 
-// DOM node has three varient.
-// - Element node: node_name attributes child_nodes
-// - Text node: node_value is content
-// - Comment node: node_value is comment
+/// DOM node has three varient.
+/// - Element node: node_name attributes child_nodes
+/// - Text node: node_value is content
+/// - Comment node: node_value is comment
 
 pub enum Node {
     Element {
@@ -298,7 +298,7 @@ pub enum Node {
     },
 }
 
-// Creat default doctype and html
+/// Creat default doctype and html
 
 impl Node {
     fn default_doctype() -> Node {
@@ -318,7 +318,7 @@ impl Node {
     }
 }
 
-// Display node
+/// Display node
 
 impl fmt::Display for Node {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -359,7 +359,7 @@ impl fmt::Display for Node {
     }
 }
 
-// Create Text node
+/// Create Text node
 
 #[macro_export]
 macro_rules! text {
@@ -370,7 +370,7 @@ macro_rules! text {
     };
 }
 
-// Create Comment node
+/// Create Comment node
 
 #[macro_export]
 macro_rules! comment {
@@ -381,7 +381,7 @@ macro_rules! comment {
     };
 }
 
-// Create Element
+/// Create Element
 
 #[macro_export]
 macro_rules! element {
@@ -435,7 +435,7 @@ macro_rules! element {
 
 }
 
-// Parse attributes and elements
+/// Parse attributes and elements
 
 #[macro_export]
 macro_rules! attributes_nodes {
@@ -498,7 +498,7 @@ macro_rules! attributes_nodes {
     };
 }
 
-// Create Vec<Node>
+/// Create Vec<Node>
 
 #[macro_export]
 macro_rules! nodes {
@@ -530,7 +530,7 @@ macro_rules! nodes {
     };
 }
 
-// A simplified DOM
+/// A simplified DOM
 pub struct DOM {
     doctype: Node,
     html: Node,
@@ -558,7 +558,7 @@ impl fmt::Display for DOM {
         write!(f, "{}{}", doctype, html)
     }
 }
-// Build html file
+/// Build html file
 
 #[macro_export]
 macro_rules! build {
