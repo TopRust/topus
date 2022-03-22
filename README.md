@@ -4,16 +4,18 @@
 
 我的想法是
 
-1. 构建一个简单`struct DOM`，由上至下有`enum Node`和枚举`enum Attribute`。
-2. 实现`Display trait`，通过to_string()转换成字符串
+1. 构建一个简单`struct DOM`，由上至下有`enum Node`和`enum Attribute`。
+2. 实现`Display trait`，通过`to_string()`转换成字符串
 3. 创建`html`文件，写入字符串
 
 ## Attribute
 
+为了减少学习难度，所有字符串类型为`String`，而不是带有生命周期的`&str`。
+
 `enum Attribute`有两个attribute变种。
 
 1. `Boolean(String)`，代表布尔属性，如hidden。
-2. `Normal { key: String, value: Sting }`，代表普通属性，如style="display: None"
+2. `Normal { key: String, value: Sting }`，代表普通属性，如`style="display: None"`。
 
 ### 创建方式
 
@@ -105,8 +107,6 @@ let macro_doctype = element!(!DOCTYPE html);
 let macro_a = element!(a hidden style="display:None");
 ```
 
-细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
-
 ### 断言
 
 ``` rust
@@ -117,6 +117,8 @@ assert_eq!(doctype, macro_doctype);
 assert_eq!(a, macro_a);
 assert_eq!("<a hidden style=\"display:None\">".to_string(), macro_a.to_string());
 ```
+
+细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
 
 ### 创建Vec<Node>
 

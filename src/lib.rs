@@ -6,16 +6,18 @@
 
 //! 我的想法是
 
-//! 1. 构建一个简单`struct DOM`，由上至下有`enum Node`和枚举`enum Attribute`。
-//! 2. 实现`Display trait`，通过to_string()转换成字符串
+//! 1. 构建一个简单`struct DOM`，由上至下有`enum Node`和`enum Attribute`。
+//! 2. 实现`Display trait`，通过`to_string()`转换成字符串
 //! 3. 创建`html`文件，写入字符串
 
 //! ## Attribute
 
+//! 为了减少学习难度，所有字符串类型为`String`，而不是带有生命周期的`&str`。
+
 //! `enum Attribute`有两个attribute变种。
 
 //! 1. `Boolean(String)`，代表布尔属性，如hidden。
-//! 2. `Normal { key: String, value: Sting }`，代表普通属性，如style="display: None"
+//! 2. `Normal { key: String, value: Sting }`，代表普通属性，如`style="display: None"`。
 
 //! ### 创建方式
 
@@ -58,7 +60,7 @@
 //! ``` rust
 //! let attributes = attributes!(html style="display:None");
 //! assert_eq!(
-//!     vec![
+//!     vec![ 
 //!         Attribute::Normal{
 //!             key: "style".to_string(),
 //!             value: "display:None".to_string()
@@ -107,8 +109,6 @@
 //! let macro_a = element!(a hidden style="display:None");
 //! ```
 
-//! 细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
-
 //! ### 断言
 
 //! ``` rust
@@ -120,6 +120,8 @@
 //! assert_eq!("<a hidden style=\"display:None\">".to_string(), macro_a.to_string());
 //! ```
 
+//! 细心的又发现了，`macro_a.to_string()` 中的`hidden` 和`style="display: None"` 属性顺序是正向了，因为在实现`Display trait` 过程中，通过`attributes.iter().rev()`逆转了`attributes`的显示顺序。
+
 //! ### 创建Vec<Node>
 
 //! 使用elements宏可以很方便的创建Vec<Node>
@@ -127,7 +129,7 @@
 //! ``` rust
 //! let nodes = nodes!(head body);
 //! assert_eq!(
-//!     vec![
+//!     vec![ 
 //!         element!(body),
 //!         element!(head),],
 //!     attrs);
@@ -162,16 +164,16 @@
 //! ```
 
 use std::fmt;
-/// Attribute has two varient.
-/// - Boolean: html, hidden
-/// - Normal: style="display: None"
+// Attribute has two varient.
+// - Boolean: html, hidden
+// - Normal: style="display: None"
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub enum Attribute {
     Boolean(String),
     Normal { key: String, value: String },
 }
 
-/// Display Attribute
+// Display Attribute
 
 impl fmt::Display for Attribute {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -186,7 +188,7 @@ impl fmt::Display for Attribute {
     }
 }
 
-/// Create Attribute
+// Create Attribute
 #[macro_export]
 macro_rules! attribute {
     ($value:ident) => {
@@ -218,7 +220,7 @@ macro_rules! attribute {
     };
 }
 
-/// Create Vec<Attribute>
+// Create Vec<Attribute>
 
 macro_rules! attributes {
     () => {
@@ -277,10 +279,10 @@ macro_rules! attributes {
     };
 }
 
-/// DOM node has three varient.
-/// - Element node: node_name attributes child_nodes
-/// - Text node: node_value is content
-/// - Comment node: node_value is comment
+// DOM node has three varient.
+// - Element node: node_name attributes child_nodes
+// - Text node: node_value is content
+// - Comment node: node_value is comment
 
 pub enum Node {
     Element {
@@ -296,7 +298,7 @@ pub enum Node {
     },
 }
 
-/// Creat default doctype and html
+// Creat default doctype and html
 
 impl Node {
     fn default_doctype() -> Node {
@@ -316,7 +318,7 @@ impl Node {
     }
 }
 
-/// Display node
+// Display node
 
 impl fmt::Display for Node {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -357,7 +359,7 @@ impl fmt::Display for Node {
     }
 }
 
-/// Create Text node
+// Create Text node
 
 #[macro_export]
 macro_rules! text {
@@ -368,7 +370,7 @@ macro_rules! text {
     };
 }
 
-/// Create Comment node
+// Create Comment node
 
 #[macro_export]
 macro_rules! comment {
@@ -379,7 +381,7 @@ macro_rules! comment {
     };
 }
 
-/// Create Element
+// Create Element
 
 #[macro_export]
 macro_rules! element {
@@ -433,7 +435,7 @@ macro_rules! element {
 
 }
 
-/// Parse attributes and elements
+// Parse attributes and elements
 
 #[macro_export]
 macro_rules! attributes_nodes {
@@ -496,7 +498,7 @@ macro_rules! attributes_nodes {
     };
 }
 
-/// Create Vec<Node>
+// Create Vec<Node>
 
 #[macro_export]
 macro_rules! nodes {
@@ -528,7 +530,7 @@ macro_rules! nodes {
     };
 }
 
-/// A simplified DOM
+// A simplified DOM
 pub struct DOM {
     doctype: Node,
     html: Node,
@@ -556,7 +558,7 @@ impl fmt::Display for DOM {
         write!(f, "{}{}", doctype, html)
     }
 }
-/// Build html file
+// Build html file
 
 #[macro_export]
 macro_rules! build {
