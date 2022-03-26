@@ -64,7 +64,7 @@ assert_eq!(
             value: "display:None".to_string()
         },
         Attribute::Boolean("html".to_string())],
-    attrs);
+    attributes);
 ```
 
 细心的应该发现问题了，`html`和`style="display:None"` 属性是逆向加入`Vec`容器的。
@@ -82,8 +82,8 @@ assert_eq!(
 1. 直接创建
 
 ``` rust
-let text = Node::Text { node_value: "hello world".to_string() }
-let comment = Node::Comment { node_value: "comment".to_string()}
+let text = Node::Text { node_value: "hello world".to_string() };
+let comment = Node::Comment { node_value: "comment".to_string()};
 
 let doctype = Node::Element {
     node_name: "!DOCTYPE".to_string(),
