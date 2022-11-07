@@ -115,7 +115,7 @@ macro_rules! attributes_nodes {
     };
 }
 
-/// Create Element
+/// Create Element Node
 
 #[macro_export]
 macro_rules! element {
@@ -169,6 +169,41 @@ macro_rules! element {
 
 }
 
+/// Copy from https://www.itranslater.com/qa/details/2582473408575439872
+fn word(word: &str) -> String {
+    let mut chars = word.chars();
+    match chars.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + chars.as_str()
+    }
+}
+#[macro_export]
+/// Define Custom Element Node
+macro_rules! define {
+
+    ($name: ident $(-$tail: ident)+) => {
+        {
+            let tag_name = stringify!($name);
+            let mut class_name = word(tag_name);
+            let mut tag_name = tag_name.to_string();
+
+            $(
+                let tail = stringify!($tail);
+                let upper_tail = word(tail);
+                tag_name = format!("{}-{}", tag_name, tail);
+                class_name = format!("{}{}", class_name, upper_tail);
+
+            )+
+
+            element!(script => 
+                text!(
+                    format!("class PopUpInfo extends HTMLElement {{ constructor() {{ super(); }} }}\ncustomElements.define('{}', {});", tag_name, class_name)
+                ),
+            )
+        }
+    };
+}
+
 /// Create Text node
 
 #[macro_export]
@@ -205,6 +240,7 @@ impl Node {
                 element!(meta http-equiv="X-UA-Compatible" content="IE=edge"),
                 element!(meta name="viewport" content="width=device-width, initial-scale=1.0"),
                 element!(title => text!(title),),
+                define!(my-custom),
             ),
             element!(body => text!(""),),
         )
